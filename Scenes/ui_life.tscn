@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bjlti164wky6m"]
+
+[ext_resource type="Texture2D" uid="uid://dwjwmfvlbww24" path="res://assets/kenney_space-shooter-redux/PNG/UI/playerLife1_blue.png" id="1_f2r63"]
+
+[node name="Life" type="TextureRect"]
+texture = ExtResource("1_f2r63")

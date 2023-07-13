@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://b2tj3re6bg62c"]
+
+[ext_resource type="Script" path="res://Scripts/start.gd" id="1_ljdy6"]
+[ext_resource type="PackedScene" uid="uid://d05cimdugq3b" path="res://Scenes/StartMenu.tscn" id="2_c0r8n"]
+
+[node name="Start" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_ljdy6")
+
+[node name="CanvasLayer2" parent="." instance=ExtResource("2_c0r8n")]

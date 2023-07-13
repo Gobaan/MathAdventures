@@ -11,6 +11,17 @@ enum AsteroidSize{LARGE, MEDIUM, SMALL, FINISHED}
 @onready var sprite = $Sprite2D
 @onready var cshape = $CollisionShape2D
 
+static func get_points(asteroid_size) -> int:
+		match asteroid_size:
+			AsteroidSize.LARGE:
+				return 50
+			AsteroidSize.MEDIUM:
+				return 100
+			AsteroidSize.SMALL:
+				return 200
+			_:
+				return 0
+
 func complete_wrap():
 	var radius =  cshape.shape.radius
 	var screen_size = get_viewport_rect().size
@@ -40,3 +51,9 @@ func _physics_process(delta):
 func explode():
 	emit_signal("exploded", global_position, size)
 	queue_free()
+
+
+func _on_body_entered(body):
+	if body is Player:
+		var player = body
+		player.die() # Replace with function body.
