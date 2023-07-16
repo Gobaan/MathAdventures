@@ -1,8 +1,6 @@
-[gd_scene load_steps=14 format=3 uid="uid://hdkbommrm45s"]
+[gd_scene load_steps=12 format=3 uid="uid://hdkbommrm45s"]
 
-[ext_resource type="PackedScene" uid="uid://cxnvttaic4xwg" path="res://Scenes/player.tscn" id="1_1m5o8"]
 [ext_resource type="Script" path="res://Scripts/Game.gd" id="1_wel6u"]
-[ext_resource type="PackedScene" uid="uid://fqk355orw75n" path="res://Scenes/asteroid.tscn" id="3_4v140"]
 [ext_resource type="PackedScene" uid="uid://bm0pq53hmrnyd" path="res://Scenes/hud.tscn" id="4_4losf"]
 [ext_resource type="PackedScene" uid="uid://vd1652vncsen" path="res://Scenes/game_over.tscn" id="5_7pf1w"]
 [ext_resource type="PackedScene" uid="uid://c4g8n0mneglxm" path="res://Scenes/player_spawn_area.tscn" id="6_ac3u3"]
@@ -52,27 +50,14 @@ scale_max = 5.0
 position = Vector2(360, 180)
 script = ExtResource("1_wel6u")
 
-[node name="Player" parent="." instance=ExtResource("1_1m5o8")]
-position = Vector2(360, 180)
-
 [node name="Lasers" type="Node" parent="."]
 
 [node name="Asteroids" type="Node" parent="."]
 
-[node name="Asteroid" parent="Asteroids" instance=ExtResource("3_4v140")]
-position = Vector2(360, 180)
-
-[node name="Asteroid2" parent="Asteroids" instance=ExtResource("3_4v140")]
-position = Vector2(295, 339)
-size = 2
-
-[node name="Asteroid3" parent="Asteroids" instance=ExtResource("3_4v140")]
-position = Vector2(818, 60)
-size = 0
-
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="HUD" parent="UI" instance=ExtResource("4_4losf")]
+visible = false
 
 [node name="GameOver" parent="UI" instance=ExtResource("5_7pf1w")]
 visible = false
@@ -82,12 +67,6 @@ offset_right = 447.0
 offset_bottom = 275.0
 
 [node name="Start" parent="UI" instance=ExtResource("6_bc86q")]
-visible = false
-
-[node name="PlayerSpawnPosition" type="Node2D" parent="."]
-position = Vector2(360, 180)
-
-[node name="PlayerSpawnArea" parent="PlayerSpawnPosition" instance=ExtResource("6_ac3u3")]
 
 [node name="LaserSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("7_q1y0p")
@@ -123,3 +102,34 @@ amount = 30
 process_material = SubResource("ParticleProcessMaterial_qdpfr")
 lifetime = 140.0
 preprocess = 280.0
+
+[node name="SpawnPositions" type="Node" parent="."]
+
+[node name="PlayerOneSpawn" type="Node2D" parent="SpawnPositions"]
+position = Vector2(600, 382)
+
+[node name="PlayerSpawnArea" parent="SpawnPositions/PlayerOneSpawn" instance=ExtResource("6_ac3u3")]
+position = Vector2(-5, 1)
+
+[node name="PlayerTwoSpawn" type="Node2D" parent="SpawnPositions"]
+position = Vector2(843, 370)
+
+[node name="PlayerSpawnArea" parent="SpawnPositions/PlayerTwoSpawn" instance=ExtResource("6_ac3u3")]
+position = Vector2(-4, 0)
+
+[node name="PlayerThreeSpawn" type="Node2D" parent="SpawnPositions"]
+position = Vector2(343, 369)
+
+[node name="PlayerSpawnArea" parent="SpawnPositions/PlayerThreeSpawn" instance=ExtResource("6_ac3u3")]
+
+[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://Scenes/player.tscn", "res://Scenes/laser.tscn")
+spawn_path = NodePath("..")
+
+[node name="LaserSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://Scenes/laser.tscn")
+spawn_path = NodePath("../Lasers")
+
+[node name="AsteroidSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://Scenes/asteroid.tscn")
+spawn_path = NodePath("../Asteroids")

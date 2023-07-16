@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://b236sn3hee2p7"]
+[gd_scene load_steps=5 format=3 uid="uid://b236sn3hee2p7"]
 
 [ext_resource type="Script" path="res://Scripts/Laser.gd" id="1_4ccag"]
 [ext_resource type="Texture2D" uid="uid://dbak7p4ix628j" path="res://assets/kenney_space-shooter-redux/PNG/Lasers/laserBlue01.png" id="1_c74mf"]
@@ -6,6 +6,16 @@
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4b2b0"]
 radius = 5.0
 height = 56.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_338c0"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/sync = true
+properties/0/watch = false
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/sync = true
+properties/1/watch = false
 
 [node name="Laser" type="Area2D"]
 collision_layer = 8
@@ -23,6 +33,9 @@ shape = SubResource("CapsuleShape2D_4b2b0")
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
 position = Vector2(0, -10)
 scale = Vector2(0.642827, 1.11122)
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_338c0")
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

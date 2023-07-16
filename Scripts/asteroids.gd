@@ -29,6 +29,7 @@ func complete_wrap():
 	global_position.y = wrap(global_position.y, -radius , screen_size.y + radius)
 
 func _ready():
+	if !is_multiplayer_authority(): return
 	rotation = randf_range(0, 2*PI)
 	match size:
 		AsteroidSize.LARGE:
@@ -45,6 +46,7 @@ func _ready():
 			cshape.shape = preload("res://Resources/asteroid_cshape_small.tres")
 	
 func _physics_process(delta):
+	if !is_multiplayer_authority(): return
 	global_position += movement_vector.rotated(rotation) * speed * delta
 	complete_wrap()
 

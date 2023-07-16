@@ -1,10 +1,13 @@
-extends Control
+extends CanvasLayer
 
-signal host
-@onready var mainMenu = $CanvasLayer/MainMenu
-@onready var address = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/AddressEntry
+signal hosted
+signal single_player_started
+signal joined
 
-const port = 99999
+@onready var mainMenu = $MainMenu
+@onready var address = $MainMenu/MarginContainer/VBoxContainer/AddressEntry
+
+const PORT  = 9999
 var enet_peer = ENetMultiplayerPeer.new()
 
 # Called when the node enters the scene tree for the first time.
@@ -18,10 +21,16 @@ func _process(delta):
 
 
 func _on_host_pressed():
-	enet_peer.create_server(port)
+	enet_peer.create_server(PORT)
 	multiplayer.multiplayer_peer = enet_peer
-	emit_signal("host")
+	emit_signal("hosted")
 
 
 func _on_join_pressed():
-	pass # Replace with function body.
+	enet_peer.create_client("localhost", PORT)
+	multiplayer.multiplayer_peer = enet_peer
+	emit_signal("joined")
+
+
+func _on_single_player_pressed():
+	emit_signal("single_player_started")

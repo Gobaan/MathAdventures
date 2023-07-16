@@ -1,10 +1,35 @@
-[gd_scene load_steps=4 format=3 uid="uid://cxnvttaic4xwg"]
+[gd_scene load_steps=7 format=3 uid="uid://cxnvttaic4xwg"]
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_vk3vj"]
 [ext_resource type="Texture2D" uid="uid://cknhsp8c615e8" path="res://assets/kenney_space-shooter-redux/PNG/playerShip1_blue.png" id="2_v363g"]
+[ext_resource type="Script" path="res://Scripts/InputSynchronizer.gd" id="3_65yg4"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vo1y3"]
 radius = 47.3373
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ai8yx"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/sync = true
+properties/0/watch = false
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/sync = true
+properties/1/watch = false
+properties/2/path = NodePath("Sprite2D:visible")
+properties/2/spawn = true
+properties/2/sync = true
+properties/2/watch = false
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_marsj"]
+properties/0/path = NodePath("InputSynchronizer:turning_direction")
+properties/0/spawn = true
+properties/0/sync = true
+properties/0/watch = false
+properties/1/path = NodePath("InputSynchronizer:vector")
+properties/1/spawn = true
+properties/1/sync = true
+properties/1/watch = false
 
 [node name="Player" type="CharacterBody2D"]
 scale = Vector2(0.7, 0.7)
@@ -21,3 +46,10 @@ shape = SubResource("CircleShape2D_vo1y3")
 
 [node name="Muzzle" type="Node2D" parent="."]
 position = Vector2(0, -45.7143)
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_ai8yx")
+
+[node name="InputSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_marsj")
+script = ExtResource("3_65yg4")
