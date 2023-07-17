@@ -23,6 +23,10 @@ var lives:
 		
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	if "--server" in OS.get_cmdline_args():
+		print ("Started server")
+		_on_host()
+	print ("Code started")
 	score = 0
 	lives = 3
 	player_count = 0
@@ -30,6 +34,7 @@ func _ready():
 	
 	start_screen.connect("hosted", _on_host)
 	start_screen.connect("joined", _on_join)
+	start_screen.connect("single_player_started", _on_single_player)
 	
 	for asteroid in asteroids.get_children():
 		asteroid.connect("exploded", _on_asteroid_exploded)
@@ -45,8 +50,10 @@ func _on_host():
 	hud.show()
 	multiplayer.peer_connected.connect(add_player)
 
-
-
+func _on_single_player():
+	start_screen.hide()
+	hud.show()
+	add_player(multiplayer.get_unique_id())
 
 func _on_join():
 	start_screen.hide()
@@ -61,7 +68,7 @@ func add_player(peer_id):
 	new_player.spawn = spawn_positions.get_child(player_count)
 	add_child(new_player)
 	new_player.respawn()
-	player_count += 1
+	player_count += 1 
 	spawn_asteroid(Vector2(50, 50), Asteroid.AsteroidSize.LARGE)
 
 

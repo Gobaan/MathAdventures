@@ -5,3 +5,4 @@ assets/fonts/
 assets/audio/
 
 *.tmp
+bin/
