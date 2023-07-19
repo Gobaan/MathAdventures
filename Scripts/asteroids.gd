@@ -6,7 +6,7 @@ var movement_vector := Vector2(0, -1)
 var speed := 50.0
 
 enum AsteroidSize{LARGE, MEDIUM, SMALL, FINISHED}
-@export var size := AsteroidSize.LARGE
+@export var size : AsteroidSize
 
 @onready var sprite = $Sprite2D
 @onready var cshape = $CollisionShape2D
@@ -29,7 +29,8 @@ func complete_wrap():
 	global_position.y = wrap(global_position.y, -radius , screen_size.y + radius)
 
 func _ready():
-	if !is_multiplayer_authority(): return
+	set_process(get_multiplayer_authority() == multiplayer.get_unique_id())
+	set_physics_process(get_multiplayer_authority() == multiplayer.get_unique_id())
 	rotation = randf_range(0, 2*PI)
 	match size:
 		AsteroidSize.LARGE:
@@ -51,6 +52,7 @@ func _physics_process(delta):
 	complete_wrap()
 
 func explode():
+	if !is_multiplayer_authority(): return 
 	emit_signal("exploded", global_position, size)
 	queue_free()
 

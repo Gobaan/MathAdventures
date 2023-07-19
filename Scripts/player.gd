@@ -21,19 +21,28 @@ var shoot_cooldown = false
 @export var alive = true
 var lives = 3
 
+func _enter_tree():
+	set_multiplayer_authority(str(name).to_int())
+	
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	set_process(get_multiplayer_authority() == multiplayer.get_unique_id())
+	set_physics_process(get_multiplayer_authority() == multiplayer.get_unique_id())
+
+
 func _process(_delta):
-	if !alive or !is_multiplayer_authority(): return
+	if !alive: return
 	if input.shooting:
 		if not shoot_cooldown:
 			shoot_cooldown = true
-			shoot_laser()
+			shoot_laser.rpc()
 			await get_tree().create_timer(shoot_cooldown_timer).timeout
 			shoot_cooldown = false
 			input.shooting = false
 
 
 func _physics_process(delta):
-	if !alive or !is_multiplayer_authority(): return
+	if !alive: return
 	velocity += input.vector.rotated(rotation) * acceleration
 	velocity = velocity.limit_length(max_speed)
 	rotate(deg_to_rad(rotation_speed * input.turning_direction * delta))
@@ -49,7 +58,7 @@ func complete_wrap():
 	global_position.x = wrap(global_position.x, 0, screen_size.x)
 	global_position.y = wrap(global_position.y, 0 , screen_size.y)
 
-
+@rpc("call_remote")
 func shoot_laser():
 	var shot = laser_scene.instantiate()
 	shot.global_position = muzzle.global_position

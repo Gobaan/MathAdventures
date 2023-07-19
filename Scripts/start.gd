@@ -9,28 +9,41 @@ signal joined
 
 const PORT  = 9999
 var enet_peer = ENetMultiplayerPeer.new()
-
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-
-
+	if "--server" in OS.get_cmdline_args():
+		print ("Started server")
+		call_deferred('_on_host_pressed')
+	elif "--client" in OS.get_cmdline_args():
+		print ("Started client")
+		call_deferred('_on_join_pressed')
+		
+	print ("Menu started")
+	
 func _on_host_pressed():
 	enet_peer.create_server(PORT)
+	if enet_peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED:
+		push_error("Failed to host at port:", PORT)
+		return
 	multiplayer.multiplayer_peer = enet_peer
+	print (enet_peer)
 	emit_signal("hosted")
 
 
 func _on_join_pressed():
-	enet_peer.create_client("localhost", PORT)
+	var uri = "gobaan.com"
+	enet_peer.create_client(uri, PORT)
+	if enet_peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED:
+		push_error("Failed to host at ip: ", uri, ":", PORT)
+		return
 	multiplayer.multiplayer_peer = enet_peer
 	emit_signal("joined")
 
 
 func _on_single_player_pressed():
 	emit_signal("single_player_started")
+
+
+func _exit_tree():
+	print ("closing server")
+	if enet_peer.get_connection_status() != MultiplayerPeer.CONNECTION_DISCONNECTED:
+		enet_peer.close()

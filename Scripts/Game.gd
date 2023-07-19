@@ -23,10 +23,6 @@ var lives:
 		
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	if "--server" in OS.get_cmdline_args():
-		print ("Started server")
-		_on_host()
-	print ("Code started")
 	score = 0
 	lives = 3
 	player_count = 0
@@ -48,6 +44,7 @@ func _process(_delta):
 func _on_host():
 	start_screen.hide()
 	hud.show()
+	print ("hosting")
 	multiplayer.peer_connected.connect(add_player)
 
 func _on_single_player():
