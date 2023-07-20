@@ -25,8 +25,8 @@ static func get_points(asteroid_size) -> int:
 func complete_wrap():
 	var radius =  cshape.shape.radius
 	var screen_size = get_viewport_rect().size
-	global_position.x = wrap(global_position.x, -radius, screen_size.x + radius)
-	global_position.y = wrap(global_position.y, -radius , screen_size.y + radius)
+	global_position.x = wrap(global_position.x, -radius, 1280 + radius)
+	global_position.y = wrap(global_position.y, -radius , 720 + radius)
 
 func _ready():
 	set_process(get_multiplayer_authority() == multiplayer.get_unique_id())

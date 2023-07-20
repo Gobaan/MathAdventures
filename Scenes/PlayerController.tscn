@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://cbgb7glw5lb4k"]
+
+[ext_resource type="Script" path="res://Scripts/InputSynchronizer.gd" id="1_5wkla"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_marsj"]
+properties/0/path = NodePath("InputSynchronizer:turning_direction")
+properties/0/spawn = false
+properties/0/sync = true
+properties/0/watch = false
+properties/1/path = NodePath("InputSynchronizer:vector")
+properties/1/spawn = false
+properties/1/sync = true
+properties/1/watch = false
+properties/2/path = NodePath("InputSynchronizer:shooting")
+properties/2/spawn = true
+properties/2/sync = true
+properties/2/watch = false
+
+[node name="InputSynchronizer" type="MultiplayerSynchronizer"]
+replication_config = SubResource("SceneReplicationConfig_marsj")
+script = ExtResource("1_5wkla")

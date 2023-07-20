@@ -39,6 +39,9 @@ func _ready():
 func _process(_delta):
 	if Input.is_action_just_pressed("Reset"):
 		get_tree().reload_current_scene()
+		
+	if Input.is_action_just_pressed("SpawnAsteroid") and multiplayer.is_server():
+		spawn_new_asteroid()
 
 
 func _on_host():
@@ -62,12 +65,22 @@ func add_player(peer_id):
 	new_player.name = str(peer_id)
 	new_player.connect("laser_shot", _on_player_laser_shot)
 	new_player.connect("died", _on_player_died)
-	new_player.spawn = spawn_positions.get_child(player_count)
-	add_child(new_player)
-	new_player.respawn()
+	new_player.spawn_position = spawn_positions.get_child(player_count).global_position
+	print (new_player.spawn_position)
+	new_player.player_number = player_count
+	add_child(new_player, true)
 	player_count += 1 
-	spawn_asteroid(Vector2(50, 50), Asteroid.AsteroidSize.LARGE)
+	
+	
 
+func spawn_new_asteroid():
+	var asteroid_spawn_location = $AsteroidPath/AsteroidSpawnLocation
+	asteroid_spawn_location.progress_ratio = randf()
+	var pos = asteroid_spawn_location.position
+	var direction = asteroid_spawn_location.rotation + PI / 2
+	var rot = direction + randf_range(-PI/4, PI/4)
+	spawn_asteroid(pos, Asteroid.AsteroidSize.LARGE, rot)
+	
 
 func _on_player_laser_shot(laser):
 	$LaserSound.play()
@@ -78,28 +91,31 @@ func _on_asteroid_exploded(current_position, size):
 	$AsteroidHitSound.play()
 	score += Asteroid.get_points(size)
 	for i in range(2):
-		spawn_asteroid(current_position, size + 1)
+		spawn_asteroid(current_position, size + 1, randf_range(0, 2*PI))
 
 
-func spawn_asteroid(current_position, size):
+func spawn_asteroid(current_position, size, rotation):
 	if size == Asteroid.AsteroidSize.FINISHED:
 		return
 
 	var asteroid = asteroid_scene.instantiate()
-	asteroid.global_position = current_position
+	asteroid.position = current_position
 	asteroid.size = size
+	asteroid.rotation = rotation
 	asteroid.connect("exploded", _on_asteroid_exploded)
 	asteroids.call_deferred('add_child', asteroid, true)
 
 func _on_player_died(player):
 	$PlayerDied.play()
-	player.global_position = player.spawn.global_position
+	player.global_position = player.spawn_position
 	lives = player.lives
 	if lives <= 0:
 		await get_tree().create_timer(2).timeout
 		game_over_screen.visible = true
 	else:
 		await get_tree().create_timer(1).timeout
-		while !player.spawn.get_child(0).is_empty:
+		var spawn_position = spawn_positions.get_child(player.player_number).get_child(0)
+		while !spawn_position.is_empty:
 			await get_tree().create_timer(0.1).timeout
 		player.respawn()
+

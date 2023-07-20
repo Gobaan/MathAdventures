@@ -1,35 +1,52 @@
-[gd_scene load_steps=7 format=3 uid="uid://cxnvttaic4xwg"]
+[gd_scene load_steps=8 format=3 uid="uid://cxnvttaic4xwg"]
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_vk3vj"]
 [ext_resource type="Texture2D" uid="uid://cknhsp8c615e8" path="res://assets/kenney_space-shooter-redux/PNG/playerShip1_blue.png" id="2_v363g"]
 [ext_resource type="Script" path="res://Scripts/InputSynchronizer.gd" id="3_65yg4"]
+[ext_resource type="Script" path="res://Scenes/InputController.gd" id="3_sd2yw"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vo1y3"]
 radius = 47.3373
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ai8yx"]
-properties/0/path = NodePath(".:position")
+properties/0/path = NodePath(".:rotation")
 properties/0/spawn = true
 properties/0/sync = true
 properties/0/watch = false
-properties/1/path = NodePath(".:rotation")
+properties/1/path = NodePath("Sprite2D:visible")
 properties/1/spawn = true
 properties/1/sync = true
 properties/1/watch = false
-properties/2/path = NodePath("Sprite2D:visible")
+properties/2/path = NodePath(".:alive")
 properties/2/spawn = true
 properties/2/sync = true
 properties/2/watch = false
+properties/3/path = NodePath(".:position")
+properties/3/spawn = true
+properties/3/sync = true
+properties/3/watch = false
+properties/4/path = NodePath("CollisionShape2D:disabled")
+properties/4/spawn = true
+properties/4/sync = true
+properties/4/watch = false
+properties/5/path = NodePath(".:spawn_position")
+properties/5/spawn = true
+properties/5/sync = true
+properties/5/watch = false
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_marsj"]
-properties/0/path = NodePath("InputSynchronizer:turning_direction")
+properties/0/path = NodePath("Controls/InputSynchronizer:turning_direction")
 properties/0/spawn = true
 properties/0/sync = true
 properties/0/watch = false
-properties/1/path = NodePath("InputSynchronizer:vector")
+properties/1/path = NodePath("Controls/InputSynchronizer:vector")
 properties/1/spawn = true
 properties/1/sync = true
 properties/1/watch = false
+properties/2/path = NodePath("Controls/InputSynchronizer:shooting")
+properties/2/spawn = true
+properties/2/sync = true
+properties/2/watch = false
 
 [node name="Player" type="CharacterBody2D"]
 scale = Vector2(0.7, 0.7)
@@ -47,9 +64,13 @@ shape = SubResource("CircleShape2D_vo1y3")
 [node name="Muzzle" type="Node2D" parent="."]
 position = Vector2(0, -45.7143)
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="PlayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_ai8yx")
 
-[node name="InputSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="Controls" type="Node" parent="."]
+script = ExtResource("3_sd2yw")
+
+[node name="InputSynchronizer" type="MultiplayerSynchronizer" parent="Controls"]
+root_path = NodePath("../..")
 replication_config = SubResource("SceneReplicationConfig_marsj")
 script = ExtResource("3_65yg4")

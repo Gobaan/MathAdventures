@@ -43,7 +43,9 @@ func _on_single_player_pressed():
 	emit_signal("single_player_started")
 
 
-func _exit_tree():
-	print ("closing server")
-	if enet_peer.get_connection_status() != MultiplayerPeer.CONNECTION_DISCONNECTED:
-		enet_peer.close()
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		print ("closing server")
+		if enet_peer.get_connection_status() != MultiplayerPeer.CONNECTION_DISCONNECTED:
+			enet_peer.close()
+		get_tree().quit()
