@@ -66,10 +66,8 @@ func shoot_laser():
 		
 func respawn():
 	if !is_multiplayer_authority(): return
-	print ("Respawn:", get_multiplayer_authority())
 	alive = true
 	global_position = spawn_position
-	print (spawn_position)
 	velocity = Vector2.ZERO
 	sprite.visible = true
 	cshape.set_deferred("disabled", false)

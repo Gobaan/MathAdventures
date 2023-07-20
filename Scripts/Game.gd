@@ -60,13 +60,11 @@ func _on_join():
 	hud.show()
 
 func add_player(peer_id):
-	print (peer_id, ":", player_count)
 	var new_player = player_scene.instantiate()
 	new_player.name = str(peer_id)
 	new_player.connect("laser_shot", _on_player_laser_shot)
 	new_player.connect("died", _on_player_died)
 	new_player.spawn_position = spawn_positions.get_child(player_count).global_position
-	print (new_player.spawn_position)
 	new_player.player_number = player_count
 	add_child(new_player, true)
 	player_count += 1 
@@ -119,3 +117,9 @@ func _on_player_died(player):
 			await get_tree().create_timer(0.1).timeout
 		player.respawn()
 
+
+
+func _on_timer_timeout():
+	print (player_count)
+	if player_count > 0:
+		spawn_new_asteroid() 
