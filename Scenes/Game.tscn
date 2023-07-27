@@ -60,6 +60,8 @@ script = ExtResource("1_wel6u")
 
 [node name="Asteroids" type="Node" parent="."]
 
+[node name="Players" type="Node" parent="."]
+
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="HUD" parent="UI" instance=ExtResource("4_4losf")]
@@ -113,8 +115,8 @@ lifetime = 140.0
 preprocess = 280.0
 
 [node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://Scenes/player.tscn")
-spawn_path = NodePath("..")
+_spawnable_scenes = PackedStringArray("res://Scenes/client.tscn")
+spawn_path = NodePath("../Players")
 
 [node name="LaserSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://Scenes/laser.tscn")

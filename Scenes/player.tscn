@@ -39,11 +39,11 @@ properties/0/path = NodePath("Controls/InputSynchronizer:turning_direction")
 properties/0/spawn = true
 properties/0/sync = true
 properties/0/watch = false
-properties/1/path = NodePath("Controls/InputSynchronizer:vector")
+properties/1/path = NodePath("Controls/InputSynchronizer:shooting")
 properties/1/spawn = true
 properties/1/sync = true
 properties/1/watch = false
-properties/2/path = NodePath("Controls/InputSynchronizer:shooting")
+properties/2/path = NodePath("Controls/InputSynchronizer:velocity")
 properties/2/spawn = true
 properties/2/sync = true
 properties/2/watch = false
@@ -66,6 +66,8 @@ position = Vector2(0, -45.7143)
 
 [node name="PlayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_ai8yx")
+
+[node name="Node" type="Node" parent="PlayerSynchronizer"]
 
 [node name="Controls" type="Node" parent="."]
 script = ExtResource("3_sd2yw")

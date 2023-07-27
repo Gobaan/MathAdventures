@@ -21,11 +21,10 @@ var laser_scene = preload("res://Scenes/laser.tscn")
 var shoot_cooldown = false
 @export var alive = true
 var shooting = false
-var lives = 3
+
 
 func _ready():
 	if !is_multiplayer_authority(): return
-	print ('ready')
 	respawn()
 	
 	
@@ -43,11 +42,11 @@ func _process(_delta):
 
 func _physics_process(delta):
 	if !alive or !is_multiplayer_authority(): return
-	velocity += input.vector.rotated(rotation) * acceleration
+	velocity += input.velocity.rotated(rotation) * acceleration
 	velocity = velocity.limit_length(max_speed)
 	rotate(deg_to_rad(rotation_speed * input.turning_direction * delta))
 	
-	if input.vector.y == 0:
+	if input.velocity.y == 0:
 		velocity = velocity.move_toward(Vector2.ZERO, 3)
 
 	move_and_slide()
@@ -77,10 +76,8 @@ func die():
 		alive = false
 		sprite.visible = false
 		cshape.set_deferred("disabled", true)
-		lives -= 1
-		emit_signal("died", self)
+		emit_signal("died")
 
 @rpc("any_peer")
 func shoot():
 	shooting = true
-
